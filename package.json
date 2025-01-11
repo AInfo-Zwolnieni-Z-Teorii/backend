@@ -1,0 +1,26 @@
+{
+  "name": "ainfo",
+  "version": "1.0.0",
+  "description": "Backend for website for AInfo project from 'Zwolnienii Z Teorii'",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm run start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AInfo-Zwolnieni-Z-Teorii/backend.git"
+  },
+  "keywords": [
+    "backend",
+    "express",
+    "javascript",
+    "ainfo",
+    "zwolnieniizteorii"
+  ],
+  "author": "MKKosmowski",
+  "license": "SEE LICENSE IN LICENSE",
+  "bugs": {
+    "url": "https://github.com/AInfo-Zwolnieni-Z-Teorii/backend/issues"
+  },
+  "homepage": "https://github.com/AInfo-Zwolnieni-Z-Teorii/backend#readme"
+}
