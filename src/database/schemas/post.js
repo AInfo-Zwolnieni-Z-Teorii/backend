@@ -54,6 +54,23 @@ const postSchema = new mongoose.Schema(
 			maxLength: 500000,
 			required: true,
 		},
+
+		isMainFeatured: {
+			type: Boolean,
+			default: false,
+			required: true,
+			required: true,
+		},
+
+		views: {
+			type: Number,
+			default: 0,
+			min: 0,
+			max: 1000000000,
+			minLength: 1,
+			maxLength: 1000,
+			required: true,
+		},
 	},
 	{ timestamps: true }
 );
