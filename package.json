@@ -27,6 +27,7 @@
   "homepage": "https://github.com/AInfo-Zwolnieni-Z-Teorii/backend#readme",
   "dependencies": {
     "dotenv": "^16.4.7",
+    "express": "^4.21.2",
     "mongoose": "^8.9.4",
     "nodemon": "^3.1.9"
   }
