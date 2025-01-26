@@ -1,0 +1,14 @@
+{
+    "title": "Post Testowy",
+    "slug": "post-testowy",
+    "authorName": "Jan Kowalski",
+    "thumbnailName": "testThumbnail.jpg",
+    "ytIframe": "<iframe width='560' height='315' src='https://www.youtube.com/embed/xvFZjo5PgG0?si=Ie0zcba_tR3Z-6Fi' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share' referrerpolicy='strict-origin-when-cross-origin' allowfullscreen></iframe>",
+    "content": "test content",
+    "creationDate": "2023-03-27T15:34:56.000Z",
+    "categories": [
+        {"name": "KategoriaTestowa", "slug": "kategoria-testowa"},
+        {"name": "KategoriaTestowa2", "slug": "kategoria-testowa2"},
+        {"name": "KategoriaTestowa3", "slug": "kategoria-testowa3"}
+    ]
+}

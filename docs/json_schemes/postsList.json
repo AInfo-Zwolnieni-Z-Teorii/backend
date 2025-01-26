@@ -1,0 +1,32 @@
+[
+    {
+        "title": "Post Testowy",
+        "slug": "post-testowy",
+        "creationDate": "2023-03-27T15:34:56.000Z",
+        "categories": [
+            {"name": "KategoriaTestowa", "slug": "kategoria-testowa"},
+            {"name": "KategoriaTestowa2", "slug": "kategoria-testowa2"},
+            {"name": "KategoriaTestowa3", "slug": "kategoria-testowa3"}
+        ]
+    },
+    {
+        "title": "Post Testowy",
+        "slug": "post-testowy",
+        "creationDate": "2023-03-27T15:34:56.000Z",
+        "categories": [
+            {"name": "KategoriaTestowa", "slug": "kategoria-testowa"},
+            {"name": "KategoriaTestowa2", "slug": "kategoria-testowa2"},
+            {"name": "KategoriaTestowa3", "slug": "kategoria-testowa3"}
+        ]
+    },
+    {
+        "title": "Post Testowy",
+        "slug": "post-testowy",
+        "creationDate": "2023-03-27T15:34:56.000Z",
+        "categories": [
+            {"name": "KategoriaTestowa", "slug": "kategoria-testowa"},
+            {"name": "KategoriaTestowa2", "slug": "kategoria-testowa2"},
+            {"name": "KategoriaTestowa3", "slug": "kategoria-testowa3"}
+        ]
+    }
+]
