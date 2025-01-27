@@ -1,6 +1,6 @@
 # Odczytywanie postów
 
-> Uwaga: w każdej ścieżce przed /api należy umieścić adres URL: https://ainfo-backend-ns38d1lmu-mikolaj-kosmowskis-projects.vercel.app
+> Uwaga: w każdej ścieżce przed /api należy umieścić adres URL: https://ainfo-api.vercel.app/
 
 ## Pobieranie pełnego postu
 
