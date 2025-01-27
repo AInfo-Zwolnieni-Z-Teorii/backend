@@ -6,7 +6,8 @@
   "scripts": {
     "test": "nodemon index.js",
     "dev": "nodemon index.js",
-    "start": "node ./src/index.js"
+    "start": "node ./src/index.js",
+    "vercel-build": "echo app started on vercel"
   },
   "repository": {
     "type": "git",
