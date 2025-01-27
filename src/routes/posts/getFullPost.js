@@ -1,5 +1,6 @@
 const { Router } = require("express");
 const Post = require("../../database/schemas/post");
+const { transformPost } = require("../../utils/transformPost");
 
 const router = new Router();
 
@@ -20,19 +21,7 @@ router.get("/api/posts/:slug", async (req, res) => {
 		}
 
 		// Restructuring data
-		const rectructuredPost = {
-			title: post.title,
-			slug: post.slug,
-			authorName: post.author.username,
-			thumbnailName: post.thumbnailName,
-			ytIframe: post.ytIframe,
-			content: post.content,
-			creationDate: post.createdAt,
-			categories: post.category.map((category) => ({
-				name: category.name,
-				slug: category.slug,
-			})),
-		};
+		const rectructuredPost = transformPost(post);
 
 		// Sending back data
 		res.status(200).json(rectructuredPost);
@@ -41,7 +30,7 @@ router.get("/api/posts/:slug", async (req, res) => {
 
 		res
 			.status(500)
-			.json({ msg: "Błąd serwera. Proszę spróbować ponownie później" });
+			.json({ msg: "Błąd serwera. Proszę spróbować ponownie później." });
 	}
 });
 
