@@ -4,8 +4,6 @@ const express = require("express");
 const dbConnect = require("./database/dbConnect");
 const mainRouter = require("./routes/index");
 
-const { createPost } = require("../tests/dbTests");
-
 // Configs
 const app = express();
 dbConnect();

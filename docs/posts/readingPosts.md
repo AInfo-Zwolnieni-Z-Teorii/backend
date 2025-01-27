@@ -1,11 +1,13 @@
 # Odczytywanie postów
 
+> Uwaga: w każdej ścieżce przed /api należy umieścić adres URL: https://ainfo-backend-ns38d1lmu-mikolaj-kosmowskis-projects.vercel.app
+
 ## Pobieranie pełnego postu
 
 ### Ścieżka
 
 ```
-https://ainfo-blog.pl/api/posts/:slug
+/api/posts/:slug
 ```
 
 - **:slug** to miejsce na wstawienie skróconej wersji tytułu postu (slugu)
@@ -34,7 +36,7 @@ Endpoint służy do pobierania pełnego pojedynczego postu (razem z autorem oraz
 }
 ```
 
-#### W przypadku powodzeia (dla https://ainfo-blog.pl/api/posts/ai-a-przyszlosc-pracy)
+#### W przypadku powodzeia (dla /api/posts/ai-a-przyszlosc-pracy)
 
 ```json
 {
@@ -65,6 +67,16 @@ Endpoint służy do pobierania pełnego pojedynczego postu (razem z autorem oraz
 
 **Uwaga:** Data utworzenia postu podana jest w formacie uniwersalnym (do przetworzenia)
 
+**Uwaga:** Do przetworzenia jest również tekst w 'content', gdyż występuje w zakodowanym formacie (np. \u003E zamiast <).
+
+Aby go rozkodować należy użyć funckji
+
+```javascript
+JSON.parse(content);
+```
+
+Gdzie `content` to zmienna zawierająca treść postu.
+
 ---
 
 ## Pobieranie listy postów
@@ -72,7 +84,7 @@ Endpoint służy do pobierania pełnego pojedynczego postu (razem z autorem oraz
 ### Ścieżka
 
 ```
-https://ainfo-blog.pl/api/posts?limit=wartosc_limitu
+/api/posts?limit=wartosc_limitu
 ```
 
 - **limit** to parametr zapytania określający maksymalną liczbę pobranych postów

@@ -1,6 +1,11 @@
 const { Router } = require("express");
 const { query, validationResult, matchedData } = require("express-validator");
+
+// Mongoose scheamas
 const Post = require("../../database/schemas/post");
+const User = require("../../database/schemas/user");
+const Category = require("../../database/schemas/category");
+
 const { transformPost } = require("../../utils/transformPost");
 
 const router = new Router();

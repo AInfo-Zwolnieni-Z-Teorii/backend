@@ -14,6 +14,7 @@ function transformPost(dbPost, shortPost = false) {
 
 	newPost.authorName = dbPost.author.username;
 	newPost.ytIframeLink = dbPost.ytIframeLink;
+
 	newPost.content = dbPost.content;
 
 	return newPost;
