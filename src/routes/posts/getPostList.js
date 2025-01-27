@@ -42,7 +42,7 @@ router.get(
 			}
 
 			// Restructuring data
-			const rectructuredPosts = posts.map((post) => transformPost(post));
+			const rectructuredPosts = posts.map((post) => transformPost(post, true));
 
 			// Sending back data
 			return res.status(200).json(rectructuredPosts);
