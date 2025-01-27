@@ -1,37 +1,61 @@
 const { Router } = require("express");
+const { param, validationResult, matchedData } = require("express-validator");
 const Post = require("../../database/schemas/post");
 const { transformPost } = require("../../utils/transformPost");
 
 const router = new Router();
 
-router.get("/api/posts/:slug", async (req, res) => {
-	const { slug } = req.params;
+router.get(
+	"/api/posts/:slug",
+	// Slug validation
+	param("slug")
+		.notEmpty()
+		.withMessage("Slug jest wymagany")
+		.isString()
+		.withMessage("Slug musi być tekstem")
+		.isLength({ min: 1, max: 100 })
+		.withMessage("Slug musi mieć długość od 1 do 100 znaków")
+		.matches(/^[a-z0-9-]+$/)
+		.withMessage("Slug może zawierać jedynie małe litery, cyfry i myślniki")
+		.withMessage("Tekst może zawierać tylko litery i myślniki"),
+	async (req, res) => {
+		// Walidation results
+		const resutls = validationResult(req);
 
-	try {
-		// Getting the post
-		const post = await Post.findOne({ slug: slug })
-			.populate("author")
-			.populate("category");
-
-		// If there is no post
-		if (!post) {
-			return res
-				.status(404)
-				.json({ error: "Post o podanych danych nie istnieje!" });
+		// Check for incorrect data
+		if (!resutls.isEmpty()) {
+			return res.status(400).json({ errors: resutls.array() });
 		}
 
-		// Restructuring data
-		const rectructuredPost = transformPost(post);
+		// Getting slug
+		const { slug } = matchedData(req);
 
-		// Sending back data
-		res.status(200).json(rectructuredPost);
-	} catch (err) {
-		console.log(err);
+		try {
+			// Getting the post
+			const post = await Post.findOne({ slug: slug })
+				.populate("author")
+				.populate("category");
 
-		res
-			.status(500)
-			.json({ msg: "Błąd serwera. Proszę spróbować ponownie później." });
+			// If there is no post
+			if (!post) {
+				return res
+					.status(404)
+					.json({ error: "Post o podanych danych nie istnieje!" });
+			}
+
+			// Restructuring data
+			const rectructuredPost = transformPost(post);
+
+			// Sending back data
+			res.status(200).json(rectructuredPost);
+		} catch (err) {
+			console.log(err);
+
+			res
+				.status(500)
+				.json({ msg: "Błąd serwera. Proszę spróbować ponownie później." });
+		}
 	}
-});
+);
 
 module.exports = router;

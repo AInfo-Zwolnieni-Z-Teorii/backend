@@ -4,27 +4,30 @@ const postSchema = new mongoose.Schema(
 	{
 		title: {
 			type: String,
-			minLength: 1,
-			maxLength: 100,
-			required: true,
+			minLength: [1, "Tytuł musi mieć co najmniej 1 znak"],
+			maxLength: [100, "Tytuł nie może być dłuższy niż 100 znaków"],
+			required: [true, "Tytuł jest wymagany"],
 			index: true,
-			unique: true,
+			unique: [true, "Tytuł musi być unikalny"],
 		},
 
-		// Slug is the URL-friendly version of the post title
 		slug: {
 			type: String,
-			minLength: 1,
-			maxLength: 50,
-			required: true,
-			unique: true,
+			minLength: [1, "Slug musi mieć co najmniej 1 znak"],
+			maxLength: [50, "Slug nie może być dłuższy niż 50 znaków"],
+			required: [true, "Slug jest wymagany"],
+			unique: [true, "Slug musi być unikalny"],
 			index: true,
+			match: [
+				/^[a-z0-9-]+$/,
+				"Slug może zawierać tylko małe litery, cyfry i myślniki",
+			],
 		},
 
 		author: {
 			type: mongoose.Schema.Types.ObjectId,
 			ref: "User",
-			required: true,
+			required: [true, "Autor jest wymagany"],
 			index: true,
 		},
 
@@ -32,46 +35,53 @@ const postSchema = new mongoose.Schema(
 			{
 				type: mongoose.Schema.Types.ObjectId,
 				ref: "Category",
-				required: true,
+				required: [true, "Kategoria jest wymagana"],
 				index: true,
 			},
 		],
 
 		thumbnailName: {
 			type: String,
-			minLength: 5,
-			maxLength: 200,
-			required: true,
+			minLength: [5, "Nazwa miniaturki musi mieć co najmniej 5 znaków"],
+			maxLength: [200, "Nazwa miniaturki nie może być dłuższa niż 200 znaków"],
+			required: [true, "Nazwa miniaturki jest wymagana"],
+			match: [
+				/^[^\\\/:*?"<>|]+(?:\.[a-zA-Z0-9]+)?$/,
+				"Nazwa pliku jest nieprawidłowa.",
+			],
 		},
 
 		ytIframeLink: {
 			type: String,
-			minLength: 7,
-			maxLength: 500,
+			minLength: [7, "Link do iFrame YouTube musi mieć co najmniej 7 znaków"],
+			maxLength: [
+				500,
+				"Link do iFrame YouTube nie może być dłuższy niż 500 znaków",
+			],
 		},
 
 		content: {
 			type: String,
-			minLength: 1,
-			maxLength: 500000,
-			required: true,
+			minLength: [1, "Treść posta musi mieć co najmniej 1 znak"],
+			maxLength: [500000, "Treść posta nie może być dłuższa niż 500000 znaków"],
+			required: [true, "Treść posta jest wymagana"],
 		},
 
 		isMainFeatured: {
 			type: Boolean,
 			default: false,
-			required: true,
-			required: true,
+			required: [
+				true,
+				"Określenie, czy jest to główny post wyróżniony, jest wymagane",
+			],
 		},
 
 		views: {
 			type: Number,
 			default: 0,
-			min: 0,
-			max: 1000000000,
-			minLength: 1,
-			maxLength: 1000,
-			required: true,
+			min: [0, "Liczba wyświetleń nie może być mniejsza niż 0"],
+			max: [1000000000, "Liczba wyświetleń nie może przekroczyć 1 miliarda"],
+			required: [true, "Liczba wyświetleń jest wymagana"],
 		},
 	},
 	{ timestamps: true }

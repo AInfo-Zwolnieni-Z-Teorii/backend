@@ -4,48 +4,42 @@ const userSchema = new mongoose.Schema(
 	{
 		username: {
 			type: String,
-			minLength: 1,
-			maxLength: 100,
-			required: true,
-			unique: true,
+			minLength: [1, "Nazwa użytkownika musi mieć co najmniej 1 znak"],
+			maxLength: [100, "Nazwa użytkownika nie może być dłuższa niż 100 znaków"],
+			required: [true, "Nazwa użytkownika jest wymagana"],
+			unique: [true, "Nazwa użytkownika musi być unikalna"],
 			index: true,
 		},
 
-		// Slug is the URL-friendly version of the username
 		slug: {
 			type: String,
-			minLength: 1,
-			maxLength: 50,
-			unique: true,
+			minLength: [1, "Slug użytkownika musi mieć co najmniej 1 znak"],
+			maxLength: [50, "Slug użytkownika nie może być dłuższy niż 50 znaków"],
+			unique: [true, "Slug użytkownika musi być unikalny"],
 			index: true,
 		},
 
 		email: {
 			type: String,
-			minLength: 5,
-			maxLength: 500,
-			required: true,
-			unique: true,
+			minLength: [5, "Adres e-mail musi mieć co najmniej 5 znaków"],
+			maxLength: [500, "Adres e-mail nie może być dłuższy niż 500 znaków"],
+			required: [true, "Adres e-mail jest wymagany"],
+			unique: [true, "Adres e-mail musi być unikalny"],
 			index: true,
-			validate: {
-				validator: function (v) {
-					return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
-				},
-				message: "Nieprawidłowy adres e-mail",
-			},
+			match: [/^[^\s@]+@[^\s@]+\.[^\s@]+$/, "Nieprawidłowy adres e-mail"],
 		},
 
 		password: {
 			type: String,
-			minLength: 1,
-			maxLength: 300,
-			required: true,
+			minLength: [1, "Hasło musi mieć co najmniej 1 znak"],
+			maxLength: [300, "Hasło nie może być dłuższe niż 300 znaków"],
+			required: [true, "Hasło jest wymagane"],
 		},
 
 		isAdmin: {
 			type: Boolean,
 			default: false,
-			required: true,
+			required: [true, "Określenie roli administratora jest wymagane"],
 		},
 	},
 	{ timestamps: true }

@@ -1,35 +1,58 @@
 const { Router } = require("express");
+const { query, validationResult, matchedData } = require("express-validator");
 const Post = require("../../database/schemas/post");
 const { transformPost } = require("../../utils/transformPost");
 
 const router = new Router();
 
-router.get("/api/posts", async (req, res) => {
-	const { limit } = req.query;
+router.get(
+	"/api/posts",
+	// Limit validation
+	query("limit")
+		.notEmpty()
+		.withMessage("Limit jest wymagany")
+		.isLength({ min: 1, max: 100 })
+		.withMessage("Limit musi mieć długość od 1 do 100 znaków")
+		.isInt({ min: 1, max: Number.MAX_SAFE_INTEGER })
+		.withMessage("Limit musi być liczbą całkowitą dodatnią"),
+	async (req, res) => {
+		// Validation results
+		const resutls = validationResult(req);
 
-	try {
-		// Getting posts
-		const posts = await Post.find()
-			.populate("author")
-			.populate("category")
-			.limit(limit);
-
-		// Check if there are any posts
-		if (!posts || posts.length === 0) {
-			return res.status(404).json({ error: "Nie znaleziono żadnych postów!" });
+		// Check for incorrect data
+		if (!resutls.isEmpty()) {
+			return res.status(400).json({ errors: resutls.array() });
 		}
 
-		// Restructuring data
-		const rectructuredPosts = posts.map((post) => transformPost(post));
+		// Getting limit
+		const { limit } = matchedData(req);
 
-		// Sending back data
-		return res.status(200).json(rectructuredPosts);
-	} catch (err) {
-		console.log(err);
-		return res
-			.status(500)
-			.json({ error: "Błąd serwera. Proszę spróbować ponownie później." });
+		try {
+			// Getting posts
+			const posts = await Post.find()
+				.populate("author")
+				.populate("category")
+				.limit(limit);
+
+			// Check if there are any posts
+			if (!posts || posts.length === 0) {
+				return res
+					.status(404)
+					.json({ error: "Nie znaleziono żadnych postów!" });
+			}
+
+			// Restructuring data
+			const rectructuredPosts = posts.map((post) => transformPost(post));
+
+			// Sending back data
+			return res.status(200).json(rectructuredPosts);
+		} catch (err) {
+			console.log(err);
+			return res
+				.status(500)
+				.json({ error: "Błąd serwera. Proszę spróbować ponownie później." });
+		}
 	}
-});
+);
 
 module.exports = router;
