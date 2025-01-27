@@ -2,6 +2,9 @@ require("dotenv").config();
 const express = require("express");
 
 const dbConnect = require("./database/dbConnect");
+const mainRouter = require("./routes/index");
+
+const { createPost } = require("../tests/dbTests");
 
 // Configs
 const app = express();
@@ -10,10 +13,10 @@ dbConnect();
 // Midlewares
 app.use(express.json());
 
-// Routes
-app.get("/api/test", (req, res) => {
-	return res.status(200).send({ msg: "Test approved" });
-});
+// Routers
+app.use(mainRouter);
+
+// Tests
 
 // Start listening
 const PORT = process.env.EXPRESS_PORT || 3000;

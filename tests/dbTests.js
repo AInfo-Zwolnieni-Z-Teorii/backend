@@ -1,12 +1,16 @@
+const categoryModel = require("../src/database/schemas/category");
+const postModel = require("../src/database/schemas/post");
+const userModel = require("../src/database/schemas/user");
+
 // Basic tests for post, user and category schemas
 const createUser = async () => {
 	console.log("Creating user");
 
 	// For tests purposes
 	const newUser = new userModel({
-		username: "użytkownikTestowy",
-		email: "uzytkownik.testowy@ainfo.pl",
-		password: "hasłoTestowe",
+		username: "Michał z Ainfo",
+		email: "michal.kowalski@ainfo.pl",
+		password: "qwerty123",
 		isAdmin: true,
 	});
 
@@ -23,8 +27,8 @@ const createCategory = async () => {
 	console.log("Creating category");
 
 	const newCategory = new categoryModel({
-		name: "KategoriaTestowa",
-		slug: "kategoria-testowa",
+		name: "AI od zera",
+		slug: "ai-od-zera",
 	});
 
 	try {
@@ -40,13 +44,13 @@ const createPost = async () => {
 	console.log("Creating post");
 
 	const newPost = new postModel({
-		title: "Post Testowy",
-		slug: "post-testowy",
-		author: "6782ee2d461e2f99fe093e83",
-		category: "6782ee2d461e2f99fe093e82",
+		title: "Wpływ AI na sztukę i kreatywność",
+		slug: "wplyw-ai-na-sztuke-i-kreatywnosc",
+		author: "67975fe8e4a214e75d46ebc7",
+		category: ["67975f5305ed19129568fb4e", "67975f6c9b8147a1077cb653"],
 		thumbnailName: "testThumbnail.jpg",
 		content:
-			"<p><strong>Lorem Impsum</strong>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce eu leo quis tellus semper vehicula. Suspendisse at mattis enim. Vestibulum sit amet nisl lectus. Duis molestie feugiat mi.Mauris malesuada neque est, a mollis risus semper quis. Nullam vel risus ut quam posuere rhoncus.</p><p>Cras eleifend volutpat elit id hendrerit. Sed ullamcorper bibendum leo sed sagittis. Maecenas scelerisque diam elit, sit amet porta nunc consequat ut. Nam vulputate nulla vel rhoncus sodales. Nam in turpis vitae dui dapibus commodo vel ut risus. Donec sed leo mattis, <em>suscipit justo ut</em>, imperdiet sapien.</p>",
+			"<p>Sztuczna inteligencja zaczyna odgrywać znaczącą rolę w sztuce, muzyce i literaturze. Narzędzia AI potrafią tworzyć obrazy, komponować muzykę i pisać teksty, przekraczając granice ludzkiej kreatywności.</p><p>Choć AI oferuje niesamowite możliwości, rodzi pytania o autentyczność i własność intelektualną. <em>Czy AI może być artystą?</em></p>",
 	});
 
 	try {
@@ -62,3 +66,5 @@ const main = async () => {
 	const post = await postModel.findOne().populate("author");
 	console.log(post.author.username);
 };
+
+module.exports = { createCategory, createPost, createUser };

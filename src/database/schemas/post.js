@@ -28,12 +28,14 @@ const postSchema = new mongoose.Schema(
 			index: true,
 		},
 
-		category: {
-			type: mongoose.Schema.Types.ObjectId,
-			ref: "Category",
-			required: true,
-			index: true,
-		},
+		category: [
+			{
+				type: mongoose.Schema.Types.ObjectId,
+				ref: "Category",
+				required: true,
+				index: true,
+			},
+		],
 
 		thumbnailName: {
 			type: String,
