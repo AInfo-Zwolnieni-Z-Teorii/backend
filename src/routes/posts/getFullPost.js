@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const { param, validationResult, matchedData } = require("express-validator");
-const Post = require("../../database/schemas/post");
+const { Post } = require("../../database/schemas/post");
 const { transformPost } = require("../../utils/transformPost");
 
 const router = new Router();
@@ -31,12 +31,18 @@ router.get(
 		const { slug } = matchedData(req);
 
 		try {
-			// Getting the post
-			const post = await Post.findOne({ slug: slug })
+			// Getting the post and upadating views
+			const post = await Post.findOneAndUpdate(
+				{ slug: slug },
+				{ $inc: { views: 1 } },
+				{ new: true }
+			)
+				.populate("contentBlocks")
+				.populate("introduction")
+				.populate("tableOfContents")
 				.populate("author")
 				.populate("category");
 
-			// If there is no post
 			if (!post) {
 				return res
 					.status(404)

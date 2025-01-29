@@ -1,23 +1,78 @@
-function transformPost(dbPost, shortPost = false) {
+const transformPost = (dbPost, shortPost = false) => {
+	if (shortPost) {
+		// Short post (list post)
+		const newPost = {
+			title: dbPost.title,
+			slug: dbPost.slug,
+			thumbnailName: dbPost.thumbnailName,
+			creationDate: dbPost.createdAt,
+			categories: dbPost.category.map((category) => ({
+				name: category.name,
+				slug: category.slug,
+			})),
+		};
+
+		return newPost;
+	}
+
+	// Full post
 	const newPost = {
 		title: dbPost.title,
 		slug: dbPost.slug,
-		thumbnailName: dbPost.thumbnailName,
-		creationDate: dbPost.createdAt,
+		author: dbPost.author.username,
 		categories: dbPost.category.map((category) => ({
 			name: category.name,
 			slug: category.slug,
 		})),
+		thumbnailName: dbPost.thumbnailName,
+		introduction: {
+			header: dbPost.introduction.header,
+			content: dbPost.introduction.content,
+		},
+		tableOfContents: [
+			dbPost.tableOfContents.content.map((entry) => {
+				return {
+					header: entry.header,
+					anchor: entry.anchor,
+				};
+			}),
+		],
+		content: [
+			dbPost.contentBlocks.map((block) => {
+				if (block.type === "text") {
+					return {
+						type: "text",
+						header: block.data.header,
+						content: block.data.content,
+						anchor: block.data.anchor,
+					};
+				} else if (block.type === "image") {
+					return {
+						type: "image",
+						src: block.data.src,
+						alt: block.data.alt,
+					};
+				} else if (block.type === "image-text") {
+					return {
+						type: "image-text",
+						image: {
+							src: block.data.image.src,
+							alt: block.data.image.alt,
+						},
+						text: block.data.text.map((section) => ({
+							header: section.header,
+							paragraph: section.paragraph,
+							anchor: section.anchor,
+						})),
+						layout: block.data.layout,
+					};
+				}
+			}),
+		],
+		creationDate: dbPost.createdAt,
 	};
 
-	if (shortPost) return newPost;
-
-	newPost.authorName = dbPost.author.username;
-	newPost.ytIframeLink = dbPost.ytIframeLink;
-
-	newPost.content = dbPost.content;
-
 	return newPost;
-}
+};
 
 module.exports = { transformPost };
