@@ -2,7 +2,14 @@ const { Router } = require("express");
 const { query, validationResult, matchedData } = require("express-validator");
 
 // Mongoose scheamas
-const { Post } = require("../../database/schemas/post");
+const {
+	Post,
+	Introduction,
+	TextBlock,
+	ImageBlock,
+	ImageTextBlock,
+	TableOfContents,
+} = require("../../database/schemas/post");
 const User = require("../../database/schemas/user");
 const Category = require("../../database/schemas/category");
 

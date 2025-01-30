@@ -6,10 +6,10 @@ const mainRouter = require("./routes/index");
 
 // Configs
 const app = express();
-dbConnect();
 
 // Midlewares
 app.use(express.json());
+app.use(dbConnect); // connecting to db as a midleware
 
 // Routers
 app.use(mainRouter);
