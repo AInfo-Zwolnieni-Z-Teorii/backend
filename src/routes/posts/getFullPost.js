@@ -6,7 +6,7 @@ const { transformPost } = require("../../utils/transformPost");
 const router = new Router();
 
 router.get(
-	"/api/posts/:slug",
+	"/api/posts/full/:slug",
 	// Slug validation
 	param("slug")
 		.notEmpty()

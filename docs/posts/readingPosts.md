@@ -7,7 +7,7 @@
 ### Ścieżka
 
 ```
-/api/posts/:slug
+/api/posts/full/:slug
 ```
 
 - **:slug** to miejsce na wstawienie skróconej wersji tytułu postu (slugu)
@@ -38,7 +38,7 @@ Endpoint służy do pobierania pełnego pojedynczego postu (razem z autorem oraz
 
 **Status code:** `400`
 
-#### W przypadku powodzeia (dla /api/posts/jak-sztuczna-inteligencja-zmienia-swiat)
+#### W przypadku powodzeia (dla /api/posts/full/jak-sztuczna-inteligencja-zmienia-swiat)
 
 ```json
 {
@@ -182,7 +182,7 @@ Zwraca listę postów do wyświetlenia na stronie głównej.
 
 **Status code:** `400`
 
-### W przypadku powodzenia (dla limit=2)
+#### W przypadku powodzenia (dla limit=2)
 
 ```json
 [
@@ -226,3 +226,131 @@ Zwraca listę postów do wyświetlenia na stronie głównej.
 **Status code:** `200`
 
 **Uwaga:** Data podana jest w formacie uniwersalnym (do przetworzenia wg lokalizacji klienta).
+
+---
+
+## Pobieranie polecanych postów
+
+### Ścieżka
+
+```
+/api/posts/featured
+```
+
+### Działanie
+
+Endpoint ten służy do pobierania podobnej listy postów, co pokazana wcześniej, ale do sekcji postów wyróżnionych - na górze strony głównej.
+
+Ścieżki na te dwie listy są różne ze względu na inne sposoby dobierania postów.
+
+### Struktura zwracanego JSONa
+
+```json
+{
+	"posts": [
+		{
+			"title": "Jak sztuczna inteligencja zmienia świat?",
+			"slug": "jak-sztuczna-inteligencja-zmienia-swiat",
+			"thumbnailName": "testImage.png",
+			"creationDate": "2025-01-29T16:32:39.321Z",
+			"categories": [
+				{
+					"name": "Nowości w AI",
+					"slug": "nowosci-w-ai"
+				},
+				{
+					"name": "AI od zera",
+					"slug": "ai-od-zera"
+				}
+			],
+			"featured": true
+		},
+		{
+			"title": "Jak sztuczna inteligencja zmienia świat?",
+			"slug": "jak-sztuczna-inteligencja-zmienia-swiat",
+			"thumbnailName": "testImage.png",
+			"creationDate": "2025-01-29T16:32:39.321Z",
+			"categories": [
+				{
+					"name": "Nowości w AI",
+					"slug": "nowosci-w-ai"
+				},
+				{
+					"name": "AI od zera",
+					"slug": "ai-od-zera"
+				}
+			]
+		},
+		{
+			"title": "Jak sztuczna inteligencja zmienia edukację?",
+			"slug": "jak-sztuczna-inteligencja-zmienia-edukacje",
+			"thumbnailName": "ai-education.jpg",
+			"creationDate": "2025-01-29T16:38:47.041Z",
+			"categories": [
+				{
+					"name": "Nowości w AI",
+					"slug": "nowosci-w-ai"
+				}
+			]
+		},
+		{
+			"title": "Czy AI może być artystą?",
+			"slug": "czy-ai-moze-byc-artysta",
+			"thumbnailName": "ai-art.jpg",
+			"creationDate": "2025-01-29T16:38:47.762Z",
+			"categories": [
+				{
+					"name": "Nowości w AI",
+					"slug": "nowosci-w-ai"
+				}
+			]
+		},
+		{
+			"title": "Jak AI chroni przed cyberatakami?",
+			"slug": "jak-ai-chroni-przed-cyberatakami",
+			"thumbnailName": "ai-cybersecurity.jpg",
+			"creationDate": "2025-01-29T16:38:47.646Z",
+			"categories": [
+				{
+					"name": "AI od zera",
+					"slug": "ai-od-zera"
+				}
+			]
+		},
+		{
+			"title": "Jak sztuczna inteligencja zmienia świat?",
+			"slug": "jak-sztuczna-inteligencja-zmienia-swiat",
+			"thumbnailName": "testImage.png",
+			"creationDate": "2025-01-29T16:32:39.321Z",
+			"categories": [
+				{
+					"name": "Nowości w AI",
+					"slug": "nowosci-w-ai"
+				},
+				{
+					"name": "AI od zera",
+					"slug": "ai-od-zera"
+				}
+			]
+		}
+	]
+}
+```
+
+**Status code:** 200
+
+**Uwagi:**
+
+- **Uwaga:** Data podana jest w formacie uniwersalnym (do przetworzenia wg lokalizacji klienta).
+
+- Postów zawsze jest ta sama ilość przy czym maksymalnie jeden z nich może (ale nie musi) mieć pole `featured` ustawione na wartość `true`.
+
+  Należy wtedy wstawić go w miejsce największego postu.
+
+  Jest to forma ręcznego ustawienia promowanego postu, reszta postów wybierana jest automatycznie.
+
+---
+
+> Przy błędach serwera zawsze zwracana jest odpowiedź o kodzie 500
+
+> Zawarty JSON na stronie nie jest żeczywistą odpowiedzią serwera! Podany jest jedynie w celach poglądowych.

@@ -7,4 +7,6 @@ Aby dowiedzieć się szczegółowych infomacji o konkretnej ścieżce należy we
 - https://ainfo-backend-ns38d1lmu-mikolaj-kosmowskis-projects.vercel.app
   - api
     - [posts (GET)](./posts/readingPosts.md#pobieranie-pełnego-postu)
-      - [:slug (GET)](./posts/readingPosts.md#pobieranie-listy-postów)
+      - full
+        - [:slug (GET)](./posts/readingPosts.md#pobieranie-listy-postów)
+      - [featured (GET)](./posts/readingPosts.md#pobieranie-polecanych-postów)
