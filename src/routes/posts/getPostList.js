@@ -44,6 +44,7 @@ router.get(
 			const posts = await Post.find()
 				.populate("author")
 				.populate("category")
+				.sort({ updatedAt: -1 })
 				.limit(limit);
 
 			// Check if there are any posts
