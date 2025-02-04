@@ -1,5 +1,6 @@
 require("dotenv").config();
 const express = require("express");
+const cors = require('cors');
 
 const dbConnect = require("./database/dbConnect");
 const mainRouter = require("./routes/index");
@@ -8,6 +9,7 @@ const mainRouter = require("./routes/index");
 const app = express();
 
 // Midlewares
+app.use(cors());
 app.use(express.json());
 app.use(dbConnect); // connecting to db as a midleware
 
