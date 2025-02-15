@@ -45,6 +45,7 @@ Endpoint służy do pobierania pełnego pojedynczego postu (razem z autorem oraz
 	"title": "Jak sztuczna inteligencja zmienia świat?",
 	"slug": "jak-sztuczna-inteligencja-zmienia-swiat",
 	"author": "Jan z Ainfo",
+	"authorAvatar": "testImage.png",
 	"categories": [
 		{
 			"name": "Nowości w AI",
