@@ -14,7 +14,12 @@ const router = new Router();
 router.get("/api/posts/featured", async (req, res) => {
 	try {
 		const featuredPosts = [];
+		// Storing added post ids to avoid duplicates in featured
+		const addedPostsIds = new Set();
 		let ammount = process.env.CONST_FEATURED_AMMOUNT || 6;
+		const maxAmount = ammount;
+		let mostViewedAmount = process.env.CONST_FEATURED_MOST_VIEWED || 2;
+		let randomAmount = process.env.CONST_FEATURED_RANDOM || 1;
 
 		if (ammount <= 0) return res.status(200).send({ posts: featuredPosts });
 
@@ -25,10 +30,11 @@ router.get("/api/posts/featured", async (req, res) => {
 			.populate("author")
 			.populate("category");
 
-		if (featured) {
+		if (featured && !addedPostsIds.has(featured._id)) {
 			const transformedPost = transformPost(featured, true);
 			transformedPost.featured = true;
 			featuredPosts.push(transformedPost);
+			addedPostsIds.add(featured._id.toString()); // adding ID to set (avoid duplicates)
 			ammount--;
 		}
 
@@ -37,15 +43,22 @@ router.get("/api/posts/featured", async (req, res) => {
 		// Most viewed posts
 		const mostViewed = await Post.find()
 			.sort({ views: -1 })
-			.limit(process.env.CONST_FEATURED_MOST_VIEWED || 2)
+			.limit(maxAmount) // to avoid duplicates (choosing only unique posts)
 			.populate("author")
 			.populate("category");
 
-		mostViewed.forEach((post) => {
-			featuredPosts.push(transformPost(post, true));
-			ammount--;
-		});
-
+		// Iterating through most viewed posts until post isn't already added
+		for(const post of mostViewed) {
+			if (addedPostsIds.has(post._id.toString())) continue;
+			else {
+				featuredPosts.push(transformPost(post, true));
+				addedPostsIds.add(post._id.toString());
+				ammount--;
+				mostViewedAmount--;
+				if(mostViewedAmount <= 0) break;
+			}
+		}
+			
 		if (ammount <= 0) return res.status(200).send({ posts: featuredPosts });
 
 		// Random post (id)
@@ -54,26 +67,39 @@ router.get("/api/posts/featured", async (req, res) => {
 		]);
 
 		const random = await Post.find({ _id: { $in: randomID } })
+			.limit(maxAmount)
 			.populate("author")
 			.populate("category");
 
-		random.forEach((post) => {
-			featuredPosts.push(transformPost(post, true));
-			ammount--;
-		});
+		for(const post of random) {
+			if(addedPostsIds.has(post._id.toString())) continue;
+			else {
+				featuredPosts.push(transformPost(post, true));
+				addedPostsIds.add(post._id.toString());
+				ammount--;
+				randomAmount--;
+				if(randomAmount <= 0) break;
+			}
+		}
 
 		if (ammount <= 0) return res.status(200).send({ posts: featuredPosts });
 
 		// Most recent posts
 		const mostRecent = await Post.find()
 			.sort({ updatedAt: -1 })
-			.limit(ammount)
+			.limit(maxAmount)
 			.populate("author")
 			.populate("category");
 
-		mostRecent.forEach((post) => {
-			featuredPosts.push(transformPost(post, true));
-		});
+		for(const post of mostRecent) {
+			if(addedPostsIds.has(post._id.toString())) continue;
+			else {
+				featuredPosts.push(transformPost(post, true));
+				addedPostsIds.add(post._id.toString());
+				ammount--;
+				if(ammount <= 0) break;
+			}
+		};
 
 		return res.status(200).send({ posts: featuredPosts });
 	} catch (err) {
