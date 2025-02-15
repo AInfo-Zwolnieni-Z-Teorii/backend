@@ -20,6 +20,7 @@ const transformPost = (dbPost, shortPost = false) => {
 		title: dbPost.title,
 		slug: dbPost.slug,
 		author: dbPost.author.username,
+		authorAvatar: dbPost.author.avatar,
 		categories: dbPost.category.map((category) => ({
 			name: category.name,
 			slug: category.slug,

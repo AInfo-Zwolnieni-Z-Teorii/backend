@@ -16,9 +16,10 @@ const createUser = async () => {
 
 	// For tests purposes
 	const newUser = new userModel({
-		username: "Michał z Ainfo",
-		email: "michal.kowalski@ainfo.pl",
-		password: "qwerty123",
+		username: "Kamil z Ainfo",
+		email: "kamil.kowalski@ainfo.pl",
+		password: "qwerty321",
+		avatar: "testImage.png",
 		isAdmin: true,
 	});
 
