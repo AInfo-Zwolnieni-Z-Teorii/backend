@@ -16,6 +16,9 @@ app.use(dbConnect); // connecting to db as a midleware
 // Routers
 app.use(mainRouter);
 
+// Tests
+// app.use(require("../tests/testRouter"));
+
 // Error handlers
 app.use((req, res) => {
 	res.status(404).send({ error: "Ta ścieżka nie istnieje" });
@@ -23,6 +26,6 @@ app.use((req, res) => {
 
 // Start listening
 const PORT = process.env.EXPRESS_PORT || 3000;
-// app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
+app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
 
 module.exports = app;

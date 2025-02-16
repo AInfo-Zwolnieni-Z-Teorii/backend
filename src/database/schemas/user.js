@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { hashPassword, replacePolishChars } = require("../../utils/sanitizeUser");
 
 const userSchema = new mongoose.Schema(
 	{
@@ -53,14 +54,20 @@ const userSchema = new mongoose.Schema(
 	{ timestamps: true }
 );
 
-// Auto generating slug
 userSchema.pre("save", function (next) {
+	// Auto generating slug
 	if (this.isModified("username")) {
-		this.slug = this.username
+		this.slug = replacePolishChars(this.username)
 			.toLowerCase()
 			.replace(/[^a-z0-9]+/g, "-")
 			.replace(/^-+|-+$/g, "");
 	}
+
+	// Hashing password
+	if (this.isModified("password")) {
+		this.password = hashPassword(this.password);
+	}
+
 	next();
 });
 

@@ -16,9 +16,9 @@ const createUser = async () => {
 
 	// For tests purposes
 	const newUser = new userModel({
-		username: "Kamil z Ainfo",
-		email: "kamil.kowalski@ainfo.pl",
-		password: "qwerty321",
+		username: "Użytkownik Testowy",
+		email: "uzytkownik.testowy@ainfo.blog",
+		password: "qwerty123",
 		avatar: "testImage.png",
 		isAdmin: true,
 	});
@@ -26,9 +26,10 @@ const createUser = async () => {
 	try {
 		var savedUser = await newUser.save();
 		console.log("Nowy użytkownik: ", savedUser);
+		return true;
 	} catch (err) {
 		console.log(err);
-		process.exit(1);
+		return false;
 	}
 };
 
