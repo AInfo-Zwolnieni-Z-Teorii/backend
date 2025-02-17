@@ -1,6 +1,7 @@
 require("dotenv").config();
 
 const jwt = require("jsonwebtoken");
+const RefreshToken = require("../database/schemas/refreshToken");
 
 /**
  * Generates a JSON Web Token (JWT) for the given user.
@@ -13,6 +14,35 @@ const generateAccessToken = (user) => {
 	return jwt.sign(user, process.env.JWT_ACCESS_SECRET, {
 		expiresIn: `${process.env.JWT_ACCESS_LIFETIME}m`,
 	});
+};
+
+/**
+ * Generates a JSON Web Token (JWT) for the given user, and saves it
+ * into the database as a refresh token.
+ *
+ * @param {Object} user - The user information to be encoded in the token.
+ * @returns {string} - The generated refresh token with a 30-day expiration.
+ */
+const generateRefreshToken = async (user) => {
+	// Generating token
+	const token = jwt.sign(user, process.env.JWT_REFRESH_SECRET, {
+		expiresIn: `${process.env.JWT_REFRESH_LIFETIME}m`,
+	});
+
+	// Saving it to db
+	const newRefreshToken = new RefreshToken({
+		userId: user.id,
+		refreshToken: token,
+	});
+
+	try {
+		await newRefreshToken.save();
+	} catch (err) {
+		console.log(err);
+		return false;
+	}
+
+	return token;
 };
 
 /**
@@ -43,4 +73,4 @@ const authMiddleware = (req, res, next) => {
 	});
 };
 
-module.exports = { generateAccessToken, authMiddleware };
+module.exports = { generateAccessToken, generateRefreshToken, authMiddleware };

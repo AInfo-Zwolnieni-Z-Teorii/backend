@@ -2,6 +2,8 @@ const { Router } = require("express");
 
 // Auth routers
 const loginRouter = require("./auth/login");
+const refreshRouter = require("./auth/refresh");
+const logoutRouter = require("./auth/logout");
 
 // Posts routers
 const getFullPost = require("./posts/getFullPost");
@@ -15,6 +17,8 @@ const mainRouter = new Router();
 
 // Auth routers
 mainRouter.use(loginRouter);
+mainRouter.use(refreshRouter);
+mainRouter.use(logoutRouter);
 
 // Posts routers
 mainRouter.use(getFullPost);

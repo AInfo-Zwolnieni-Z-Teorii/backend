@@ -5,7 +5,10 @@ const { body, validationResult, matchedData } = require("express-validator");
 
 const User = require("../../database/schemas/user");
 const { comparePassword } = require("../../utils/sanitizeUser");
-const { generateAccessToken } = require("../../utils/jwt");
+const {
+	generateAccessToken,
+	generateRefreshToken,
+} = require("../../utils/jwt");
 
 const router = new Router();
 
@@ -66,6 +69,10 @@ router.post(
 		// Creating access token
 		const accessToken = generateAccessToken(savedUser);
 
+		// Creating refresh token
+		const refreshToken = await generateRefreshToken(savedUser);
+		if (!refreshToken) return res.sendStatus(500);
+
 		// Saving token in cookies
 		res
 			.cookie("accesstoken", accessToken, {
@@ -73,6 +80,12 @@ router.post(
 				secure: process.env.NODE_ENV === "development" ? false : true,
 				sameSite: "Strict",
 				maxAge: process.env.JWT_ACCESS_LIFETIME * 60 * 1000,
+			})
+			.cookie("refreshtoken", refreshToken, {
+				httpOnly: true,
+				secure: process.env.NODE_ENV === "development" ? false : true,
+				sameSite: "Strict",
+				maxAge: process.env.JWT_REFRESH_LIFETIME * 60 * 1000,
 			})
 			.sendStatus(200);
 	}
