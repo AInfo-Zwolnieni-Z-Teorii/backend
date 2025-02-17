@@ -1,8 +1,11 @@
+require("dotenv").config();
+
 const { Router } = require("express");
 const { body, validationResult, matchedData } = require("express-validator");
 
 const User = require("../../database/schemas/user");
 const { comparePassword } = require("../../utils/sanitizeUser");
+const { generateAccessToken } = require("../../utils/jwt");
 
 const router = new Router();
 
@@ -42,7 +45,7 @@ router.post(
 		const user = await User.findOne({ email: email });
 
 		if (!user) {
-			return res.status(404).json({
+			return res.status(401).json({
 				errors: [{ msg: "Użytkownik o takim adresie e-mail nie istnieje" }],
 			});
 		}
@@ -54,7 +57,24 @@ router.post(
 			});
 		}
 
-		return res.status(200).json({ user: user });
+		// Authorization - JWT
+		// Creating user to save
+		const savedUser = {
+			id: user._id,
+		};
+
+		// Creating access token
+		const accessToken = generateAccessToken(savedUser);
+
+		// Saving token in cookies
+		res
+			.cookie("accesstoken", accessToken, {
+				httpOnly: true,
+				secure: process.env.NODE_ENV === "development" ? false : true,
+				sameSite: "Strict",
+				maxAge: process.env.JWT_ACCESS_LIFETIME * 60 * 1000,
+			})
+			.sendStatus(200);
 	}
 );
 

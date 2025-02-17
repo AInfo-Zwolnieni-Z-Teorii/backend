@@ -8,6 +8,8 @@ const getFullPost = require("./posts/getFullPost");
 const getPostList = require("./posts/getPostList");
 const getFeaturedPosts = require("./posts/getFeaturedPosts");
 
+const createPost = require("./posts/createPost");
+
 // Initialize main router
 const mainRouter = new Router();
 
@@ -18,5 +20,7 @@ mainRouter.use(loginRouter);
 mainRouter.use(getFullPost);
 mainRouter.use(getPostList);
 mainRouter.use(getFeaturedPosts);
+
+mainRouter.use(createPost);
 
 module.exports = mainRouter;
