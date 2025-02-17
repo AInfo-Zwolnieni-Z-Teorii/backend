@@ -11,7 +11,7 @@ const {
 const router = new Router();
 
 router.post("/api/auth/refresh", async (req, res) => {
-	const refreshToken = req.cookies.refreshtoken.toString();
+	const refreshToken = req.cookies.refreshtoken;
 
 	// Check if token sent
 	if (refreshToken == null || refreshToken == "")
@@ -21,7 +21,7 @@ router.post("/api/auth/refresh", async (req, res) => {
 
 	// Veryfing with token in db
 	const dbToken = await RefreshTokenModel.findOne({
-		refreshToken: refreshToken,
+		refreshToken: refreshToken.toString(),
 	});
 
 	if (!dbToken)
