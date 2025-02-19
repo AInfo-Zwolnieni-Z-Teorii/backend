@@ -1,0 +1,35 @@
+{
+	"title": "Przykładowy post",
+	"categories": ["technologia", "programowanie"],
+	"thumbnailName": "post_thumbnail.png",
+	"introduction": {
+		"header": "Wprowadzenie do posta",
+		"content": "To jest przykładowe wprowadzenie, które opisuje treść posta w skrócie."
+	},
+	"content": [
+		{
+			"type": "text",
+			"header": "Nagłówek bloku tekstowego",
+			"paragraph": "Tutaj znajduje się przykładowa treść paragrafu dla bloku tekstowego."
+		},
+		{
+			"type": "image",
+			"src": "https://example.com/obrazek.jpg",
+			"alt": "Opis obrazka"
+		},
+		{
+			"type": "image-text",
+			"image": {
+				"src": "https://example.com/inny-obrazek.jpg",
+				"alt": "Opis obrazka w bloku image-text"
+			},
+			"text": [
+				{
+					"header": "Nagłówek bloku image-text",
+					"paragraph": "Przykładowa treść dla bloku łączącego obrazek z tekstem."
+				}
+			],
+			"layout": "left"
+		}
+	]
+}
