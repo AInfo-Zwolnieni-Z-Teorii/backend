@@ -50,7 +50,7 @@ const transformPost = (dbPost, shortPost = false) => {
 					return {
 						type: "text",
 						header: block.data.header,
-						content: block.data.content,
+						paragraph: block.data.paragraph,
 						anchor: block.data.anchor,
 					};
 				} else if (block.type === "image") {

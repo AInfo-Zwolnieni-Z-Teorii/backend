@@ -78,6 +78,7 @@ Endpoint służy do pobierania pełnego pojedynczego postu (razem z autorem oraz
 			{
 				"type": "text",
 				"header": "Automatyzacja w przemyśle",
+				"paragraph": "AI usprawnia procesy produkcyjne, minimalizując błędy i zwiększając wydajność. Nowoczesne roboty mogą pracować szybciej i dokładniej niż ludzie. W wielu fabrykach na całym świecie stosuje się już zaawansowane systemy sterowania oparte na AI, które analizują dane w czasie rzeczywistym i dostosowują parametry produkcji do zmieniających się warunków. Dzięki temu można unikać przestojów, optymalizować zużycie surowców i zwiększać bezpieczeństwo pracy.",
 				"anchor": "automatyzacja-w-przemysle"
 			},
 			{
