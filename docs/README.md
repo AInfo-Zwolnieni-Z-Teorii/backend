@@ -10,6 +10,7 @@ Aby dowiedzieć się szczegółowych infomacji o konkretnej ścieżce należy we
       - full
         - [:slug (GET)](./posts/readingPosts.md#pobieranie-listy-postów)
       - [featured (GET)](./posts/readingPosts.md#pobieranie-polecanych-postów)
+    - [posts [POST]](./posts/creatingPosts.md)
     - auth
       - [login (POST)](./auth/loginSystem.md#logowanie)
       - [refresh (POST)](./auth/loginSystem.md#odświeżanie)
