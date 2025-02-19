@@ -2,6 +2,7 @@ require("dotenv").config();
 
 const jwt = require("jsonwebtoken");
 const RefreshToken = require("../database/schemas/refreshToken");
+const User = require("../database/schemas/user");
 
 /**
  * Generates a JSON Web Token (JWT) for the given user.
@@ -73,4 +74,43 @@ const authMiddleware = (req, res, next) => {
 	});
 };
 
-module.exports = { generateAccessToken, generateRefreshToken, authMiddleware };
+/**
+ * Middleware to check if the authenticated user is an admin.
+ *
+ * Retrieves the user ID from the request object and queries the database
+ * to find the user. If the user is an admin, the request proceeds to the
+ * next middleware or route handler. Otherwise, it sends a 403 Forbidden
+ * status.
+ *
+ * In case of any errors during the database query, a 500 Internal Server
+ * Error status is sent.
+ *
+ * @param {Object} req - The Express.js request object, containing user information.
+ * @param {Object} res - The Express.js response object.
+ * @param {Function} next - The next middleware function to call if the user is an admin.
+ */
+
+const isAdminMiddleware = async (req, res, next) => {
+	// Getting id
+	const id = req.user.id;
+	if (!id || id == null) return res.sendStatus(403);
+
+	// Getting user
+	try {
+		const user = await User.findOne({ _id: id });
+
+		// Is admin
+		if (user.isAdmin) return next();
+		else return res.sendStatus(403);
+	} catch (err) {
+		console.log(err);
+		return res.sendStatus(500);
+	}
+};
+
+module.exports = {
+	generateAccessToken,
+	generateRefreshToken,
+	authMiddleware,
+	isAdminMiddleware,
+};
