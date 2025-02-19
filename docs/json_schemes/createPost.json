@@ -31,5 +31,8 @@
 			],
 			"layout": "left"
 		}
-	]
+	],
+
+	"mainFeatured": false,
+	"ytIframeLink": "https://www.youtube.com/embed/VIDEO_ID"
 }

@@ -1,3 +1,9 @@
+/**
+ * Transforms a post from database format to API format.
+ * @param {object} dbPost - Post in database format.
+ * @param {boolean} shortPost - If true, returns a short version of the post (list post).
+ * @returns {object} Transformed post in API format.
+ */
 const transformPost = (dbPost, shortPost = false) => {
 	if (shortPost) {
 		// Short post (list post)

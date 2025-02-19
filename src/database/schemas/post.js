@@ -196,7 +196,7 @@ const postSchema = new mongoose.Schema(
 		slug: {
 			type: String,
 			minLength: [1, "Slug musi mieć co najmniej 1 znak"],
-			maxLength: [50, "Slug nie może być dłuższy niż 50 znaków"],
+			maxLength: [100, "Slug nie może być dłuższy niż 100 znaków"],
 			required: [true, "Slug jest wymagany"],
 			unique: [true, "Slug musi być unikalny"],
 			index: true,

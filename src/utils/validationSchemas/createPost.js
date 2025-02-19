@@ -3,20 +3,20 @@ const { body } = require("express-validator");
 const createPostValidator = [
 	body("title")
 		.isString()
-		.withMessage("Title must be a string")
+		.withMessage("Tytuł musi być ciągiem znaków")
 		.notEmpty()
-		.withMessage("Title cannot be empty")
+		.withMessage("Tytuł nie może być pusty")
 		.isLength({ min: 1, max: 100 })
-		.withMessage("Title must be between 1 and 100 characters"),
+		.withMessage("Tytuł musi mieć od 1 do 100 znaków"),
 
 	body("categories")
 		.isArray()
-		.withMessage("Categories must be an array")
+		.withMessage("Kategorie muszą być tablicą")
 		.custom((categories) => {
 			categories.forEach((slug, index) => {
 				if (typeof slug !== "string" || !slug.trim()) {
 					throw new Error(
-						`Category at index ${index} must be a non-empty string`
+						`Kategoria na indeksie ${index} musi być niepustym ciągiem znaków`
 					);
 				}
 			});
@@ -25,40 +25,40 @@ const createPostValidator = [
 
 	body("thumbnailName")
 		.isString()
-		.withMessage("Thumbnail name must be a string")
+		.withMessage("Nazwa miniatury musi być ciągiem znaków")
 		.notEmpty()
-		.withMessage("Thumbnail name cannot be empty")
+		.withMessage("Nazwa miniatury nie może być pusta")
 		.isLength({ min: 5, max: 200 })
-		.withMessage("Thumbnail name must be between 5 and 200 characters")
+		.withMessage("Nazwa miniatury musi mieć od 5 do 200 znaków")
 		.matches(/^[^\\\/:*?"<>|]+(?:\.[a-zA-Z0-9]+)?$/),
 
 	// Validation for the introduction section
 	body("introduction.header")
 		.isString()
-		.withMessage("Introduction header must be a string")
+		.withMessage("Nagłówek wstępu musi być ciągiem znaków")
 		.notEmpty()
-		.withMessage("Introduction header cannot be empty")
+		.withMessage("Nagłówek wstępu nie może być pusty")
 		.isLength({ min: 1, max: 100 })
-		.withMessage("Introduction header must be between 1 and 100 characters"),
+		.withMessage("Nagłówek wstępu musi mieć od 1 do 100 znaków"),
 
 	body("introduction.content")
 		.isString()
-		.withMessage("Introduction content must be a string")
+		.withMessage("Treść wstępu musi być ciągiem znaków")
 		.notEmpty()
-		.withMessage("Introduction content cannot be empty")
+		.withMessage("Treść wstępu nie może być pusta")
 		.isLength({ min: 1, max: 1000 })
-		.withMessage("Introduction content must be between 1 and 1000 characters"),
+		.withMessage("Treść wstępu musi mieć od 1 do 1000 znaków"),
 
 	// Validation for content blocks
 	body("content")
 		.isArray()
-		.withMessage("Content must be an array")
+		.withMessage("Treść musi być tablicą")
 		.custom((content) => {
 			content.forEach((block, index) => {
 				// Check if block.type is a non-empty string
 				if (typeof block.type !== "string" || !block.type.trim()) {
 					throw new Error(
-						`Block ${index}: type is required and must be a non-empty string`
+						`Blok ${index}: typ jest wymagany i musi być niepustym ciągiem znaków`
 					);
 				}
 
@@ -67,12 +67,12 @@ const createPostValidator = [
 					case "text":
 						if (typeof block.header !== "string" || !block.header.trim()) {
 							throw new Error(
-								`Block ${index}: header must be a non-empty string`
+								`Blok ${index}: nagłówek musi być niepustym ciągiem znaków`
 							);
 						}
 						if (block.header.length < 1 || block.header.length > 200) {
 							throw new Error(
-								`Block ${index}: header must be between 1 and 200 characters`
+								`Blok ${index}: nagłówek musi mieć od 1 do 200 znaków`
 							);
 						}
 						if (
@@ -80,31 +80,35 @@ const createPostValidator = [
 							!block.paragraph.trim()
 						) {
 							throw new Error(
-								`Block ${index}: paragraph must be a non-empty string`
+								`Blok ${index}: akapit musi być niepustym ciągiem znaków`
 							);
 						}
 						if (block.paragraph.length < 1 || block.paragraph.length > 3000) {
 							throw new Error(
-								`Block ${index}: paragraph must be between 1 and 3000 characters`
+								`Blok ${index}: akapit musi mieć od 1 do 3000 znaków`
 							);
 						}
 						break;
 
 					case "image":
 						if (typeof block.src !== "string" || !block.src.trim()) {
-							throw new Error(`Block ${index}: src must be a non-empty string`);
+							throw new Error(
+								`Blok ${index}: src musi być niepustym ciągiem znaków`
+							);
 						}
 						if (block.src.length < 1 || block.src.length > 300) {
 							throw new Error(
-								`Block ${index}: src must be between 1 and 300 characters`
+								`Blok ${index}: src musi mieć od 1 do 300 znaków`
 							);
 						}
 						if (typeof block.alt !== "string" || !block.alt.trim()) {
-							throw new Error(`Block ${index}: alt must be a non-empty string`);
+							throw new Error(
+								`Blok ${index}: alt musi być niepustym ciągiem znaków`
+							);
 						}
 						if (block.alt.length < 1 || block.alt.length > 300) {
 							throw new Error(
-								`Block ${index}: alt must be between 1 and 300 characters`
+								`Blok ${index}: alt musi mieć od 1 do 300 znaków`
 							);
 						}
 						break;
@@ -113,7 +117,7 @@ const createPostValidator = [
 						// Validation for the image field
 						if (!block.image || typeof block.image !== "object") {
 							throw new Error(
-								`Block ${index}: image field is required and must be an object`
+								`Blok ${index}: pole image jest wymagane i musi być obiektem`
 							);
 						}
 						if (
@@ -121,12 +125,12 @@ const createPostValidator = [
 							!block.image.src.trim()
 						) {
 							throw new Error(
-								`Block ${index}: image.src must be a non-empty string`
+								`Blok ${index}: image.src musi być niepustym ciągiem znaków`
 							);
 						}
 						if (block.image.src.length < 1 || block.image.src.length > 300) {
 							throw new Error(
-								`Block ${index}: image.src must be between 1 and 300 characters`
+								`Blok ${index}: image.src musi mieć od 1 do 300 znaków`
 							);
 						}
 						if (
@@ -134,18 +138,18 @@ const createPostValidator = [
 							!block.image.alt.trim()
 						) {
 							throw new Error(
-								`Block ${index}: image.alt must be a non-empty string`
+								`Blok ${index}: image.alt musi być niepustym ciągiem znaków`
 							);
 						}
 						if (block.image.alt.length < 1 || block.image.alt.length > 300) {
 							throw new Error(
-								`Block ${index}: image.alt must be between 1 and 300 characters`
+								`Blok ${index}: image.alt musi mieć od 1 do 300 znaków`
 							);
 						}
 						// Validation for the text field as an array of objects
 						if (!Array.isArray(block.text) || block.text.length === 0) {
 							throw new Error(
-								`Block ${index}: text field must be a non-empty array`
+								`Blok ${index}: pole text musi być niepustą tablicą`
 							);
 						}
 						block.text.forEach((textItem, textIndex) => {
@@ -154,12 +158,12 @@ const createPostValidator = [
 								!textItem.header.trim()
 							) {
 								throw new Error(
-									`Block ${index}, text item ${textIndex}: header must be a non-empty string`
+									`Blok ${index}, element tekstowy ${textIndex}: nagłówek musi być niepustym ciągiem znaków`
 								);
 							}
 							if (textItem.header.length < 1 || textItem.header.length > 200) {
 								throw new Error(
-									`Block ${index}, text item ${textIndex}: header must be between 1 and 200 characters`
+									`Blok ${index}, element tekstowy ${textIndex}: nagłówek musi mieć od 1 do 200 znaków`
 								);
 							}
 							if (
@@ -167,7 +171,7 @@ const createPostValidator = [
 								!textItem.paragraph.trim()
 							) {
 								throw new Error(
-									`Block ${index}, text item ${textIndex}: paragraph must be a non-empty string`
+									`Blok ${index}, element tekstowy ${textIndex}: akapit musi być niepustym ciągiem znaków`
 								);
 							}
 							if (
@@ -175,7 +179,7 @@ const createPostValidator = [
 								textItem.paragraph.length > 3000
 							) {
 								throw new Error(
-									`Block ${index}, text item ${textIndex}: paragraph must be between 1 and 3000 characters`
+									`Blok ${index}, element tekstowy ${textIndex}: akapit musi mieć od 1 do 3000 znaków`
 								);
 							}
 						});
@@ -185,19 +189,29 @@ const createPostValidator = [
 							!["left", "right"].includes(block.layout)
 						) {
 							throw new Error(
-								`Block ${index}: layout must be either "left" or "right"`
+								`Blok ${index}: układ musi być "left" lub "right"`
 							);
 						}
 						break;
 
 					default:
-						throw new Error(
-							`Block ${index}: Unknown block type: ${block.type}`
-						);
+						throw new Error(`Blok ${index}: Nieznany typ bloku: ${block.type}`);
 				}
 			});
 			return true;
 		}),
+
+	body("mainFeatured")
+		.optional()
+		.isBoolean()
+		.withMessage("mainFeatured musi być wartością boolean"),
+
+	body("ytIframeLink")
+		.optional()
+		.isString()
+		.withMessage("ytIframeLink musi być ciągiem znaków")
+		.isURL()
+		.withMessage("ytIframeLink musi być poprawnym adresem URL"),
 ];
 
 module.exports = createPostValidator;

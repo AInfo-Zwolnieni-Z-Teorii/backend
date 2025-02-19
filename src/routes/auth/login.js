@@ -4,7 +4,7 @@ const { Router } = require("express");
 const { body, validationResult, matchedData } = require("express-validator");
 
 const User = require("../../database/schemas/user");
-const { comparePassword } = require("../../utils/sanitizeUser");
+const { comparePassword } = require("../../utils/sanitizeData");
 const {
 	generateAccessToken,
 	generateRefreshToken,

@@ -1,5 +1,8 @@
 const mongoose = require("mongoose");
-const { hashPassword, replacePolishChars } = require("../../utils/sanitizeUser");
+const {
+	hashPassword,
+	replacePolishChars,
+} = require("../../utils/sanitizeData");
 
 const userSchema = new mongoose.Schema(
 	{
@@ -41,10 +44,13 @@ const userSchema = new mongoose.Schema(
 			type: String,
 			minLength: [1, "Adres URL obrazu musi mieć co najmniej 1 znak"],
 			maxLength: [300, "Adres URL obrazu nie może być dłuższy niż 300 znaków"],
-			match: [/^(https?:\/\/.*\.(png|jpg|jpeg|gif|webp)|[a-zA-Z0-9_-]+\.(png|jpg|jpeg|gif|webp))$/, "Nieprawidłowy format obrazu"],
+			match: [
+				/^(https?:\/\/.*\.(png|jpg|jpeg|gif|webp)|[a-zA-Z0-9_-]+\.(png|jpg|jpeg|gif|webp))$/,
+				"Nieprawidłowy format obrazu",
+			],
 			required: [true, "Avatar jest wymagany"],
 		},
-		
+
 		isAdmin: {
 			type: Boolean,
 			default: false,
