@@ -10,7 +10,24 @@ const mainRouter = require("./routes/index");
 const app = express();
 
 // Midlewares
-// app.use(cors());
+const allowedOrigins = [
+	"https://ainfo.blog",
+	"https://localhost:3000",
+	"https://localhost:5173",
+];
+
+app.use(
+	cors({
+		origin: (origin, callback) => {
+			if (!origin || allowedOrigins.includes(origin)) {
+				callback(null, origin);
+			} else {
+				callback(new Error("Not allowed by CORS"));
+			}
+		},
+		credentials: true,
+	})
+);
 app.use(express.json());
 app.use(cookieParser());
 app.use(dbConnect); // connecting to db as a midleware
