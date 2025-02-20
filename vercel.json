@@ -1,9 +1,3 @@
 {
-	"rewrites": [{ "source": "/(.*)", "destination": "/api" }],
-	"middleware": [
-		{
-			"source": "/api/*",
-			"function": "middleware.js"
-		}
-	]
+	"rewrites": [{ "source": "/(.*)", "destination": "/api" }]
 }
