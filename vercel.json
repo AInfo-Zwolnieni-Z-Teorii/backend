@@ -1,3 +1,15 @@
 {
-    "rewrites": [{ "source": "/(.*)", "destination": "/api" }]
+	"rewrites": [{ "source": "/(.*)", "destination": "/api" }],
+	"headers": [
+		{
+			"source": "/api/(.*)",
+			"headers": [
+				{
+					"key": "Access-Control-Allow-Origin",
+					"value": "https://ainfo.blog"
+				},
+				{ "key": "Access-Control-Allow-Credentials", "value": "true" }
+			]
+		}
+	]
 }
