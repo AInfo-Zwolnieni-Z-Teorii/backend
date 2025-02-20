@@ -10,7 +10,7 @@ const mainRouter = require("./routes/index");
 const app = express();
 
 // Midlewares
-app.use(cors());
+// app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 app.use(dbConnect); // connecting to db as a midleware
