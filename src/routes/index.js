@@ -11,6 +11,8 @@ const getPostList = require("./posts/getPostList");
 const getFeaturedPosts = require("./posts/getFeaturedPosts");
 
 const createPost = require("./posts/createPost");
+const updatePost = require("./posts/updatePost");
+const deletePost = require("./posts/deletePost");
 
 // Initialize main router
 const mainRouter = new Router();
@@ -26,5 +28,7 @@ mainRouter.use(getPostList);
 mainRouter.use(getFeaturedPosts);
 
 mainRouter.use(createPost);
+mainRouter.use(updatePost);
+mainRouter.use(deletePost);
 
 module.exports = mainRouter;

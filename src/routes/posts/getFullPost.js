@@ -1,23 +1,15 @@
 const { Router } = require("express");
-const { param, validationResult, matchedData } = require("express-validator");
+const { validationResult, matchedData } = require("express-validator");
 const { Post } = require("../../database/schemas/post");
 const { transformPost } = require("../../utils/transformPost");
+const postSlugValidator = require("../../utils/validationSchemas/postSlug");
 
 const router = new Router();
 
 router.get(
 	"/api/posts/full/:slug",
 	// Slug validation
-	param("slug")
-		.notEmpty()
-		.withMessage("Slug jest wymagany")
-		.isString()
-		.withMessage("Slug musi być tekstem")
-		.isLength({ min: 1, max: 100 })
-		.withMessage("Slug musi mieć długość od 1 do 100 znaków")
-		.matches(/^[a-z0-9-]+$/)
-		.withMessage("Slug może zawierać jedynie małe litery, cyfry i myślniki")
-		.withMessage("Tekst może zawierać tylko litery i myślniki"),
+	postSlugValidator,
 	async (req, res) => {
 		// Walidation results
 		const resutls = validationResult(req);
