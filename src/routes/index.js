@@ -14,6 +14,9 @@ const createPost = require("./posts/createPost");
 const updatePost = require("./posts/updatePost");
 const deletePost = require("./posts/deletePost");
 
+// Categories routers
+const getCategoryList = require("./categories/getCategoryList");
+
 // Initialize main router
 const mainRouter = new Router();
 
@@ -30,5 +33,8 @@ mainRouter.use(getFeaturedPosts);
 mainRouter.use(createPost);
 mainRouter.use(updatePost);
 mainRouter.use(deletePost);
+
+// Categories routers
+mainRouter.use(getCategoryList);
 
 module.exports = mainRouter;
