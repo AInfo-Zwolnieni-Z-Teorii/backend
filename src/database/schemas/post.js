@@ -283,6 +283,25 @@ const postSchema = new mongoose.Schema(
 	{ timestamps: true }
 );
 
+// Middleware to delete all related data when post is deleted
+postSchema.pre("findOneAndDelete", async function (next) {
+	try {
+		const post = await this.model.findOne(this.getFilter());
+
+		if (!post) return next();
+
+		await Introduction.deleteOne({ _id: post.introduction });
+
+		await ContentBlock.deleteMany({ _id: { $in: post.contentBlocks } });
+
+		await TableOfContents.deleteOne({ _id: post.tableOfContents });
+
+		next();
+	} catch (err) {
+		next(err);
+	}
+});
+
 const Post = mongoose.model("Post", postSchema);
 
 module.exports = {
