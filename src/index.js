@@ -10,24 +10,18 @@ const mainRouter = require("./routes/index");
 const app = express();
 
 // Midlewares
-// const allowedOrigins = [
-// 	"https://ainfo.blog",
-// 	"https://localhost:3000",
-// 	"https://localhost:5173",
-// ];
-
-// app.use(
-// 	cors({
-// 		origin: (origin, callback) => {
-// 			if (!origin || allowedOrigins.includes(origin)) {
-// 				callback(null, origin);
-// 			} else {
-// 				callback(new Error("Not allowed by CORS"));
-// 			}
-// 		},
-// 		credentials: true,
-// 	})
-// );
+app.use(
+	cors({
+		origin: [
+			"https://www.ainfo.blog",
+			"http://localhost:3000",
+			"http://localhost:5173",
+			"http://127.0.0.1:3000",
+			"http://127.0.0.1:5174",
+		],
+		credentials: true,
+	})
+);
 app.use(express.json());
 app.use(cookieParser());
 app.use(dbConnect); // connecting to db as a midleware
