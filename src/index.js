@@ -2,6 +2,8 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
+const path = require("path");
+const fs = require("fs");
 
 const dbConnect = require("./database/dbConnect");
 const mainRouter = require("./routes/index");
@@ -9,7 +11,7 @@ const mainRouter = require("./routes/index");
 // Configs
 const app = express();
 
-// Midlewares
+// CORS
 app.use(
 	cors({
 		origin: [
@@ -22,9 +24,22 @@ app.use(
 		credentials: true,
 	})
 );
+
+// exporting static files - posts images
+const postsImagesPath = path.join(__dirname, "../public/postsImages");
+console.log("Posts images path:", postsImagesPath);
+
+// Check if folder exists
+if (!fs.existsSync(postsImagesPath)) {
+	console.log("UWAGA: Folder postsImages nie istnieje!");
+}
+
+app.use("/postsImages", express.static(postsImagesPath));
+
+// Midlewares and configs
 app.use(express.json());
 app.use(cookieParser());
-app.use(dbConnect); // connecting to db as a midleware
+app.use("/api", dbConnect); // connecting to db as a midleware (for api routes)
 
 // Routers
 app.use(mainRouter);

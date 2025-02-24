@@ -49,6 +49,16 @@ router.post(
 	}
 );
 
+// getting url for images
+router.get("/test-images", (req, res) => {
+	const files = fs.readdirSync(postsImagesPath);
+	res.json({
+		path: postsImagesPath,
+		files: files,
+		exists: fs.existsSync(postsImagesPath),
+	});
+});
+
 module.exports = router;
 
 // Przesyłanie w req danych odnośnie lolalizacji plików na podstronie postu
