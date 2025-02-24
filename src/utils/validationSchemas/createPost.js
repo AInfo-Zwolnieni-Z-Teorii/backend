@@ -1,3 +1,4 @@
+require("dotenv").config();
 const { body } = require("express-validator");
 
 const createPostValidator = [
@@ -23,14 +24,53 @@ const createPostValidator = [
 			return true;
 		}),
 
-	body("thumbnailName")
-		.isString()
-		.withMessage("Nazwa miniatury musi być ciągiem znaków")
-		.notEmpty()
-		.withMessage("Nazwa miniatury nie może być pusta")
-		.isLength({ min: 5, max: 200 })
-		.withMessage("Nazwa miniatury musi mieć od 5 do 200 znaków")
-		.matches(/^[^\\\/:*?"<>|]+(?:\.[a-zA-Z0-9]+)?$/),
+	// Files - thumbnail
+	body("thumbnail").custom((value, { req }) => {
+		if (!req.files || !req.files.thumbnail || !req.files.thumbnail[0]) {
+			throw new Error("Miniatura jest wymagana");
+		}
+		const file = req.files.thumbnail[0];
+
+		if (file.size > process.env.MAX_FILE_SIZE_POST_IMAGE * 1024 * 1024) {
+			throw new Error(
+				`Rozmiar miniatury nie może przekraczać ${process.env.MAX_FILE_SIZE_POST_IMAGE}MB`
+			);
+		}
+
+		const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
+		if (!allowedTypes.includes(file.mimetype)) {
+			throw new Error("Dozwolone formaty miniatury to: JPG, PNG, WEBP");
+		}
+
+		return true;
+	}),
+
+	// Files - images
+	body("images").custom((value, { req }) => {
+		if (req.files && req.files.images) {
+			if (req.files.images.length > 20) {
+				throw new Error("Można przesłać maksymalnie 20 zdjęć");
+			}
+
+			req.files.images.forEach((file, index) => {
+				if (file.size > process.env.MAX_FILE_SIZE_POST_IMAGE * 1024 * 1024) {
+					throw new Error(
+						`Zdjęcie ${index + 1}: rozmiar nie może przekraczać ${
+							process.env.MAX_FILE_SIZE_POST_IMAGE
+						}MB`
+					);
+				}
+
+				const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
+				if (!allowedTypes.includes(file.mimetype)) {
+					throw new Error(
+						`Zdjęcie ${index + 1}: dozwolone formaty to JPG, PNG, WEBP`
+					);
+				}
+			});
+		}
+		return true;
+	}),
 
 	// Validation for the introduction section
 	body("introduction.header")
@@ -53,8 +93,15 @@ const createPostValidator = [
 	body("content")
 		.isArray()
 		.withMessage("Treść musi być tablicą")
-		.custom((content) => {
+		.custom((content, { req }) => {
+			let imageIndex = 0;
+
 			content.forEach((block, index) => {
+				// Increase in case of image block or image-text block
+				if (block.type === "image" || block.type === "image-text") {
+					imageIndex++;
+				}
+
 				// Check if block.type is a non-empty string
 				if (typeof block.type !== "string" || !block.type.trim()) {
 					throw new Error(
@@ -91,16 +138,6 @@ const createPostValidator = [
 						break;
 
 					case "image":
-						if (typeof block.src !== "string" || !block.src.trim()) {
-							throw new Error(
-								`Blok ${index}: src musi być niepustym ciągiem znaków`
-							);
-						}
-						if (block.src.length < 1 || block.src.length > 300) {
-							throw new Error(
-								`Blok ${index}: src musi mieć od 1 do 300 znaków`
-							);
-						}
 						if (typeof block.alt !== "string" || !block.alt.trim()) {
 							throw new Error(
 								`Blok ${index}: alt musi być niepustym ciągiem znaków`
@@ -118,19 +155,6 @@ const createPostValidator = [
 						if (!block.image || typeof block.image !== "object") {
 							throw new Error(
 								`Blok ${index}: pole image jest wymagane i musi być obiektem`
-							);
-						}
-						if (
-							typeof block.image.src !== "string" ||
-							!block.image.src.trim()
-						) {
-							throw new Error(
-								`Blok ${index}: image.src musi być niepustym ciągiem znaków`
-							);
-						}
-						if (block.image.src.length < 1 || block.image.src.length > 300) {
-							throw new Error(
-								`Blok ${index}: image.src musi mieć od 1 do 300 znaków`
 							);
 						}
 						if (
@@ -198,6 +222,14 @@ const createPostValidator = [
 						throw new Error(`Blok ${index}: Nieznany typ bloku: ${block.type}`);
 				}
 			});
+
+			// Sprawdź czy liczba przesłanych plików zgadza się z liczbą bloków zawierających obrazy
+			if (req.files?.images && imageIndex !== req.files.images.length) {
+				throw new Error(
+					"Liczba przesłanych plików nie zgadza się z liczbą bloków zawierających obrazy"
+				);
+			}
+
 			return true;
 		}),
 
