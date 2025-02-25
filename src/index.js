@@ -25,16 +25,16 @@ app.use(
 	})
 );
 
-// exporting static files - posts images
-const postsImagesPath = path.join(__dirname, "../public/postsImages");
-console.log("Posts images path:", postsImagesPath);
+// // exporting static files - posts images
+// const postsImagesPath = path.join(__dirname, "../public/postsImages");
+// console.log("Posts images path:", postsImagesPath);
 
-// Check if folder exists
-if (!fs.existsSync(postsImagesPath)) {
-	console.log("UWAGA: Folder postsImages nie istnieje!");
-}
+// // Check if folder exists
+// if (!fs.existsSync(postsImagesPath)) {
+// 	console.log("UWAGA: Folder postsImages nie istnieje!");
+// }
 
-app.use("/postsImages", express.static(postsImagesPath));
+// app.use("/postsImages", express.static(postsImagesPath));
 
 // Midlewares and configs
 app.use(express.json());
@@ -45,7 +45,7 @@ app.use("/api", dbConnect); // connecting to db as a midleware (for api routes)
 app.use(mainRouter);
 
 // Tests
-// app.use(require("../tests/testRouter"));
+app.use(require("../tests/testRouter"));
 
 // Error handlers
 app.use((req, res) => {

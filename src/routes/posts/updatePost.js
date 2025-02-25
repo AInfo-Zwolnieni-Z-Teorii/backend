@@ -25,6 +25,10 @@ router.put(
 	createPostValidator,
 	postSlugValidator,
 	async (req, res) => {
+		return res
+			.status(501)
+			.send("Endpoint niedostosowany po zmianie przechowywania zdjęć");
+
 		// Validation
 		const result = validationResult(req);
 		if (!result.isEmpty())

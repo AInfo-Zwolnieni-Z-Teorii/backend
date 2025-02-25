@@ -227,10 +227,6 @@ const postSchema = new mongoose.Schema(
 			minLength: [5, "Nazwa miniaturki musi mieć co najmniej 5 znaków"],
 			maxLength: [200, "Nazwa miniaturki nie może być dłuższa niż 200 znaków"],
 			required: [true, "Nazwa miniaturki jest wymagana"],
-			match: [
-				/^[^\\\/:*?"<>|]+(?:\.[a-zA-Z0-9]+)?$/,
-				"Nazwa pliku jest nieprawidłowa.",
-			],
 		},
 
 		ytIframeLink: {

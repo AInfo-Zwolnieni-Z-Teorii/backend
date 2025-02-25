@@ -8,6 +8,7 @@ const fs = require("fs");
 const { authMiddleware, isAdminMiddleware } = require("../../utils/jwt");
 const { validationResult, matchedData } = require("express-validator");
 const createPostValidator = require("../../utils/validationSchemas/createPost");
+const { put } = require("@vercel/blob");
 
 const {
 	Introduction,
@@ -22,29 +23,31 @@ const Category = require("../../database/schemas/category");
 
 const { generateAnchorSlug } = require("../../utils/sanitizeData");
 const generateTableOfContents = require("../../utils/tableOfContents");
-const { v4: uuidv4 } = require("uuid");
+const { generateFileName, deleteBlob } = require("../../utils/imagesFunctions");
 
 // Multer storage config
-const storage = multer.diskStorage({
-	destination: (req, file, cb) => {
-		cb(null, "public/postsImages");
-	},
-	filename: (req, file, cb) => {
-		const uuid = uuidv4();
-		const currentDate = Date.now();
-		const filename = `${currentDate}-${uuid}${path.extname(file.originalname)}`;
+// Distk storage commented because of memoryStorage (blob storage)
+// const storage = multer.diskStorage({
+// 	destination: (req, file, cb) => {
+// 		cb(null, "public/postsImages");
+// 	},
+// 	filename: (req, file, cb) => {
+// 		const uuid = uuidv4();
+// 		const currentDate = Date.now();
+// 		const filename = `${currentDate}-${uuid}${path.extname(file.originalname)}`;
 
-		// Inicjalizacja tablicy uploadedFiles jeśli nie istnieje
-		if (!req.uploadedFiles) {
-			req.uploadedFiles = { thumbnail: [], images: [] };
-		}
+// 		// Inicjalizacja tablicy uploadedFiles jeśli nie istnieje
+// 		if (!req.uploadedFiles) {
+// 			req.uploadedFiles = { thumbnail: [], images: [] };
+// 		}
 
-		// Dodanie nazwy pliku do odpowiedniej tablicy
-		req.uploadedFiles[file.fieldname].push(filename);
+// 		// Dodanie nazwy pliku do odpowiedniej tablicy
+// 		req.uploadedFiles[file.fieldname].push(filename);
 
-		cb(null, filename);
-	},
-});
+// 		cb(null, filename);
+// 	},
+// });
+const storage = multer.memoryStorage();
 
 // Filter for files
 const fileFilter = (req, file, cb) => {
@@ -66,17 +69,18 @@ const upload = multer({
 
 const router = new Router();
 
-const deleteUploadedFiles = (files) => {
-	if (files) {
-		Object.values(files)
-			.flat()
-			.forEach((file) => {
-				fs.unlink(path.join("public/postsImages", file), (err) => {
-					if (err) console.error("Błąd podczas usuwania pliku:", err);
-				});
-			});
-	}
-};
+// Not needed with memoryStorage
+// const deleteUploadedFiles = (files) => {
+// 	if (files) {
+// 		Object.values(files)
+// 			.flat()
+// 			.forEach((file) => {
+// 				fs.unlink(path.join("public/postsImages", file), (err) => {
+// 					if (err) console.error("Błąd podczas usuwania pliku:", err);
+// 				});
+// 			});
+// 	}
+// };
 
 router.post(
 	"/api/posts",
@@ -91,7 +95,7 @@ router.post(
 				if (err) {
 					if (err instanceof multer.MulterError) {
 						if (err.code === "LIMIT_FILE_SIZE") {
-							deleteUploadedFiles(req.uploadedFiles);
+							// deleteUploadedFiles(req.uploadedFiles);
 							return res.status(400).send({
 								errors: [
 									{
@@ -103,30 +107,30 @@ router.post(
 							});
 						}
 						if (err.code === "LIMIT_FILE_COUNT") {
-							deleteUploadedFiles(req.uploadedFiles);
+							// deleteUploadedFiles(req.uploadedFiles);
 							return res.status(400).send({
 								errors: [{ msg: "Przekroczono maksymalną liczbę plików" }],
 							});
 						}
-						deleteUploadedFiles(req.uploadedFiles);
+						// deleteUploadedFiles(req.uploadedFiles);
 						return res.status(400).send({
 							errors: [{ msg: "Błąd podczas przesyłania plików" }],
 						});
 					}
 					if (err.message === "Nieprawidłowy format pliku") {
-						deleteUploadedFiles(req.uploadedFiles);
+						// deleteUploadedFiles(req.uploadedFiles);
 						return res.status(400).send({
 							errors: [{ msg: "Dozwolone formaty plików to: JPG, PNG, WEBP" }],
 						});
 					}
-					deleteUploadedFiles(req.uploadedFiles);
+					// deleteUploadedFiles(req.uploadedFiles);
 					throw err; // Przekazujemy błąd dalej zamiast zwracać 500
 				}
 				next();
 			});
 		} catch (err) {
 			console.error("Błąd podczas przesyłania plików:", err);
-			deleteUploadedFiles(req.uploadedFiles);
+			// deleteUploadedFiles(req.uploadedFiles);
 			return res.status(500).send({
 				errors: [{ msg: "Wystąpił błąd podczas przesyłania plików" }],
 			});
@@ -137,11 +141,46 @@ router.post(
 		// Validation
 		const result = validationResult(req);
 		if (!result.isEmpty()) {
-			deleteUploadedFiles(req.uploadedFiles);
+			// deleteUploadedFiles(req.uploadedFiles);
 			return res.status(400).send({ errors: result.array() });
 		}
 
 		const data = matchedData(req);
+
+		// Uploading files
+		try {
+			req.uploadedFiles = { thumbnail: [], images: [] };
+
+			// Thumbnail
+			const thumbnailName = generateFileName(
+				req.files.thumbnail[0].originalname
+			);
+			const thumbnailBlob = await put(
+				`postsImages/${thumbnailName}`,
+				req.files.thumbnail[0].buffer,
+				{
+					access: "public",
+				}
+			);
+
+			req.uploadedFiles.thumbnail.push(thumbnailBlob.url); // saving image name
+
+			// Images
+			for (const image of req.files.images) {
+				const imageName = generateFileName(image.originalname);
+				const imageBlob = await put(`postsImages/${imageName}`, image.buffer, {
+					access: "public",
+				});
+
+				req.uploadedFiles.images.push(imageBlob.url); // saving image name
+			}
+		} catch (err) {
+			console.error("Błąd podczas przesyłania plików:", err);
+			// deleteUploadedFiles(req.uploadedFiles);
+			return res.status(500).send({
+				errors: [{ msg: "Wystąpił błąd podczas przesyłania plików" }],
+			});
+		}
 
 		// Starting session + transaction
 		const mongoSession = await mongoose.startSession();
@@ -271,7 +310,8 @@ router.post(
 		} catch (err) {
 			// Transaction rollback
 			await mongoSession.abortTransaction();
-			deleteUploadedFiles(req.uploadedFiles);
+			// deleteUploadedFiles(req.uploadedFiles);
+			deleteBlob(req.uploadedFiles);
 
 			if (err.message == "ctgryERR")
 				return res
