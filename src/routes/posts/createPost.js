@@ -166,14 +166,20 @@ router.post(
 			req.uploadedFiles.thumbnail.push(thumbnailBlob.url); // saving image name
 
 			// Images
-			for (const image of req.files.images) {
-				const imageName = generateFileName(image.originalname);
-				const imageBlob = await put(`postsImages/${imageName}`, image.buffer, {
-					access: "public",
-				});
+			await Promise.all(
+				req.files.images.map(async (image) => {
+					const imageName = generateFileName(image.originalname);
+					const imageBlob = await put(
+						`postsImages/${imageName}`,
+						image.buffer,
+						{
+							access: "public",
+						}
+					);
 
-				req.uploadedFiles.images.push(imageBlob.url); // saving image name
-			}
+					req.uploadedFiles.images.push(imageBlob.url); // saving image name
+				})
+			);
 		} catch (err) {
 			console.error("Błąd podczas przesyłania plików:", err);
 			// deleteUploadedFiles(req.uploadedFiles);
