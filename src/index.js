@@ -45,7 +45,7 @@ app.use("/api", dbConnect); // connecting to db as a midleware (for api routes)
 app.use(mainRouter);
 
 // Tests
-app.use(require("../tests/testRouter"));
+// app.use(require("../tests/testRouter"));
 
 // Error handlers
 app.use((req, res) => {

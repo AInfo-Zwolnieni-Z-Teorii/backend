@@ -16,10 +16,11 @@ const createUser = async () => {
 
 	// For tests purposes
 	const newUser = new userModel({
-		username: "Użytkownik Testowy",
-		email: "uzytkownik.testowy@ainfo.blog",
-		password: "qwerty123",
-		avatar: "testImage.png",
+		username: "dimkainfo",
+		email: "ainfoproject2024@gmail.com",
+		password: "ainfoprojectzse2024",
+		avatar:
+			"https://qqpwxxowxij7oyty.public.blob.vercel-storage.com/avatars/adorable-capybaras-wild_23-2151919498-OcGbPYqNAIOnn4xFtCWNulqlc0Pm3z.jpg",
 		isAdmin: true,
 	});
 
