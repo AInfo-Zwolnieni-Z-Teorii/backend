@@ -14,6 +14,9 @@ const createPost = require("./posts/createPost");
 const updatePost = require("./posts/updatePost");
 const deletePost = require("./posts/deletePost");
 
+// Contact router
+const contactRouter = require("./contact/contact");
+
 // Categories routers
 const getCategoryList = require("./categories/getCategoryList");
 
@@ -36,5 +39,8 @@ mainRouter.use(deletePost);
 
 // Categories routers
 mainRouter.use(getCategoryList);
+
+// Contact router
+mainRouter.use(contactRouter);
 
 module.exports = mainRouter;

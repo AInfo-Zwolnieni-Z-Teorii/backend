@@ -16,3 +16,4 @@ Aby dowiedzieć się szczegółowych infomacji o konkretnej ścieżce należy we
       - [refresh (POST)](./auth/loginSystem.md#odświeżanie)
       - [logout (POST)](./auth/loginSystem.md#wylogowanie)
     - [categories (GET)](./categories/readingCategories.md)
+    - [contact (POST)](./contact/contactForm.md)
