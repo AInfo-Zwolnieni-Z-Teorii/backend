@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const { createUser } = require("./dbTests");
+const { createUser, createCategory } = require("./dbTests");
 
 const router = new Router();
 
@@ -91,6 +91,12 @@ router.get("/test-images", (req, res) => {
 		files: files,
 		exists: fs.existsSync(postsImagesPath),
 	});
+});
+
+// Categories
+router.post("/api/create-category", async (req, res) => {
+	await createCategory();
+	return res.sendStatus(201);
 });
 
 module.exports = router;

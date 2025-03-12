@@ -38,8 +38,8 @@ const createCategory = async () => {
 	console.log("Creating category");
 
 	const newCategory = new categoryModel({
-		name: "AI od zera",
-		slug: "ai-od-zera",
+		name: "Dla Programistów",
+		slug: "dla-programistow",
 	});
 
 	try {
