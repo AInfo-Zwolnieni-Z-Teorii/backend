@@ -16,6 +16,8 @@ app.use(
 	cors({
 		origin: [
 			"https://www.ainfo.blog",
+			"https://www.ainfo.vercel.app",
+			"https://ainfo.vercel.app",
 			"http://localhost:3000",
 			"http://localhost:5173",
 			"http://127.0.0.1:3000",
